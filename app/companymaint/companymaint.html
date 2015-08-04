@@ -1,0 +1,101 @@
+<div flex layout="column" class="panel-nobox" ng-controller="companymaint as vm">
+    <div layout="column" class="widget-grid widget-grid-edit panel-form">
+        <header>
+            <div layout="row" flex layout-align="start center">
+                <span>Properties</span>
+                <md-button class="md-raised md-primary widget-button" ng-click="vm.update()">Save
+                </md-button>
+            </div>
+        </header>
+        <form layout="column">
+            <div layout="row" layout-align="center end">
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].fname" id="fname"/>
+                    <label>Name</label>
+                </div>
+                <div class="m-input-container" flex="25">
+                    <input type='text' value="{{vm.companies.items[0].ts | date:'yyyy/MM/dd H:mm a'}} {{vm.companies.items[0].fby}}" disabled/>
+                    <label>Last Update</label>
+                </div>
+            </div>
+
+            <div layout="row">
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].faddress1"/>
+                    <label>Address1</label>
+                </div>
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].faddress2"/>
+                    <label>Address2</label>
+                </div>
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].fcity"/>
+                    <label>City</label>
+                </div>
+                <div class="m-input-container" style="width: 90px;">
+                    <input type='text' ng-model="vm.companies.items[0].fstate" max-length="2"/>
+                    <label>State</label>
+                </div>
+                <div class="m-input-container" style="width: 90px;">
+                    <input type='text' ng-model="vm.companies.items[0].fzip"/>
+                    <label>Zip</label>
+                </div>
+            </div>
+
+            <div layout="row">
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].fphone" phone-number/>
+                    <label>Phone</label>
+                </div>
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].fax" phone-number/>
+                    <label>Fax</label>
+                </div>
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].femail" ng-model-options="{updateOn: 'blur'}"/>
+                    <label>Email</label>
+                </div>
+                <div class="m-input-container" flex>
+                    <input type='text' ng-model="vm.companies.items[0].ftaxrate" ng-model-options="{updateOn: 'blur'}"/>
+                    <label>Tax Rate</label>
+                </div>
+            </div>
+
+            <div class="m-input-container" flex>
+                <input type='text' ng-model="vm.companies.items[0].fweb" ng-model-options="{updateOn: 'blur'}"/>
+                <label>Web Site</label>
+            </div>
+
+            <div class="m-input-container" flex>
+                <input type='text' ng-model="vm.companies.items[0].freportserver" ng-model-options="{updateOn: 'blur'}"/>
+                <label>Report Server</label>
+            </div>
+
+            <md-input-container flex>
+                <label>Sales Order Notes</label>
+                <textarea ng-model="vm.companies.items[0].fnotes1" columns="1" md-maxlength="1000"></textarea>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Purchase Order Notes</label>
+                <textarea ng-model="vm.companies.items[0].fnotes2" columns="1" md-maxlength="1000"></textarea>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Price List Notes</label>
+                <textarea ng-model="vm.companies.items[0].fnotes3" columns="1" md-maxlength="1000"></textarea>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Invoice Notes</label>
+                <textarea ng-model="vm.companies.items[0].fnotes4" columns="1" md-maxlength="1000"></textarea>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Cash Register Notes</label>
+                <textarea ng-model="vm.companies.items[0].fnotes5" columns="1" md-maxlength="1000"></textarea>
+            </md-input-container>
+
+        </form>
+    </div>
+</div>

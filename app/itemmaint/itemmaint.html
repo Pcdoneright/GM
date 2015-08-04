@@ -1,0 +1,252 @@
+<div flex layout="column" ng-controller="itemMaint as vm"
+     ng-init="vm.selectedTab = 0;vm.showInventoryGrid = false;vm.showMoreEdit = true;vm.itemnumberid = 'I'"
+     class="panel-nobox" style="overflow-y: auto">
+
+    <md-tabs md-no-bar md-no-pagination md-no-ink md-selected="vm.selectedTab" flex>
+        <md-tab Xlabel="Item List">
+            <md-tab-body>
+                <!--Item List Grid-->
+                <div layout="column" class="widget-grid">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Item List</span>
+                            <!--<md-button ng-click="vm.selectedTab = 1; vm.retrieveItem(vm.listGrid.currentItem.fimid);" aria-label="Edit Selection" class="md-raised widget-button green-color">Edit</md-button>-->
+                            <md-button
+                                    ng-click="vm.selectedTab = 1; vm.retrieveItem(vm.listGrid.selectedRows[0].fimid);"
+                                    aria-label="Edit Selection" class="md-raised widget-button green-color"
+                                    style="margin-left: 20px;color:#fff">Edit Selection
+                            </md-button>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 1">Entry
+                            </md-button>
+                            <span>Rows: {{vm.listGrid.rowData.length}}</span>
+                        </div>
+                    </header>
+                    <nav layout="row" layout-align="start center">
+                        <label>Search By:</label>
+                        <md-radio-group ng-model="vm.ftype" layout="row" layout-align="start start">
+                            <md-radio-button value="D" aria-label="Description" class="widget-md-radio-button">Description</md-radio-button>
+                            <md-radio-button value="I" aria-label="Item" class="widget-md-radio-button">Item</md-radio-button>
+                            <md-radio-button value="O" aria-label="Onsale" class="widget-md-radio-button">On-Sale</md-radio-button>
+                            <md-radio-button value="L" aria-label="Lock-Price" class="widget-md-radio-button">Lock-Price</md-radio-button>
+                            <md-radio-button value="A" aria-label="All" class="widget-md-radio-button">All</md-radio-button>
+                        </md-radio-group>
+                        <md-button ng-click="vm.listGridSearch = ''; vm.listGridRefresh('')" aria-label="Refresh"
+                                   class="md-raised md-primary widget-button-icon" style="margin-left: 10px"
+                                   ng-if="vm.ftype == 'O' || vm.ftype == 'A' || vm.ftype == 'L'">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.listGridSearch"
+                                   ng-model-options="{debounce: 800}"
+                                   ng-change="vm.listGridRefresh(vm.listGridSearch)" upper-case
+                                   placeholder="Search (Min 3 Characters)" style="width: 250px" auto-focus/>
+                        </md-input-container>
+                        <label>Price:</label>
+                        <div class="m-input-inline">
+                            <select ng-model="vm.fpcid" style="width: 150px; background-color: transparent"
+                                    ng-change="vm.listGridSetPrice()"
+                                    ng-options="opt.fpcid as opt.fdescription for opt in ::vm.priceclass"
+                                    placeholder="Price Class"></select>
+                        </div>
+                    </nav>
+                    <div ag-grid="vm.listGrid" id="listGrid" class="ag-fresh"
+                         ng-style="{height: vm.gHeight}"></div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <md-tab Xlabel="Edit">
+            <md-tab-body>
+                <div layout="column" class="widget-grid widget-grid-edit panel-form">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Item Properties</span>
+                            <md-button class="md-raised md-primary widget-button" ng-click="vm.update()">
+                                <i class="mdicon save"></i> Save
+                            </md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.newItem()">New Item</md-button>
+                            <span ng-if="!vm.validEntry()" class="widget-error"
+                                  style="padding-left: 30px">NO CHANGES CAN BE SAVED</span>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 0">List
+                            </md-button>
+                        </div>
+                    </header>
+                    <nav layout="row" layout-align="start center">
+                        <label>Search By:</label>
+                        <md-radio-group ng-model="vm.itemnumberid" layout="row" layout-align="start start"
+                                        style="padding-left: 15px">
+                            <md-radio-button value="I" aria-label="Description" class="widget-md-radio-button">ID
+                            </md-radio-button>
+                            <md-radio-button value="N" aria-label="Item Number" class="widget-md-radio-button">
+                                NUMBER
+                            </md-radio-button>
+                        </md-radio-group>
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.searchId" ng-model-options="{updateOn: 'blur'}"
+                                   placeholder="ITEM" style="width: 200px"/>
+                        </md-input-container>
+                        <md-button ng-click="vm.searchByIdNumber()" aria-label="Find"
+                                   class="md-raised md-primary widget-button-icon">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                    </nav>
+                    <form>
+                        <div layout="row">
+                            <div class="m-input-container" flex="15">
+                                <input type='text' ng-model="vm.itemmasters.items[0].fimid" disabled/>
+                                <label>ID</label>
+                            </div>
+                            <div class="m-input-container" flex>
+                                <input type='text' id="fdescription" ng-model="vm.itemmasters.items[0].fdescription" upper-case/>
+                                <label>Description</label>
+                            </div>
+                            <div class="m-input-container" flex="30">
+                                <select ng-model="vm.itemmasters.items[0].fcategory"
+                                        Xng-model-options="{updateOn: 'blur'}"
+                                        ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'IC'} : true"
+                                        placeholder="Category"></select>
+                                <label>Category</label>
+                            </div>
+                        </div>
+                        <div layout="row">
+                            <div class="m-input-container" flex>
+                                <input type="text" ng-model="vm.itemmasters.items[0].ffreightcost" valid-number ng-change="vm.fbasepriceOnChange()"
+                                       format-value="currency" model-value="float"/>
+                                <label>Freight</label>
+                            </div>
+                            <div class="m-input-container" flex>
+                                <input type="text" ng-model="vm.itemmasters.items[0].fbaseprice" valid-number
+                                       format-value="currency" model-value="float" ng-model-options="{updateOn: 'blur'}" ng-change="vm.fbasepriceOnChange()"/>
+                                <label>Base Price</label>
+                            </div>
+                            <div class="m-input-container" flex>
+                                <input type="text" ng-model="vm.itemmasters.items[0].freorderpoint" valid-number/>
+                                <label>Reorder Point</label>
+                            </div>
+                            <div class="m-input-container" flex>
+                                <input type="text" ng-model="vm.itemmasters.items[0].freorderqty" valid-number/>
+                                <label>Reorder Qty</label>
+                            </div>
+                            <md-checkbox ng-model="vm.itemmasters.items[0].fistaxable" aria-label="Taxable" flex>
+                                Taxable
+                            </md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <div class="m-input-container" flex="30">
+                                <select ng-model="vm.itemmasters.items[0].fcountryorg"
+                                        Xng-model-options="{updateOn: 'blur'}"
+                                        ng-options="opt.fid as opt.fid for opt in vm.countryorg"
+                                        placeholder="Country"></select>
+                                <label>Country of Origin</label>
+                            </div>
+                            <div class="m-input-container" flex>
+                                <input type='text' ng-model="vm.itemmasters.items[0].fnotes"
+                                       ng-model-options="{updateOn: 'blur'}"/>
+                                <label>Notes</label>
+                            </div>
+                            <div class="m-input-container" style="width: 300px">
+                                <input type='text'
+                                       value="{{vm.itemmasters.items[0].ts | date:'yyyy-MM-dd H:mm a'}} {{vm.itemmasters.items[0].fby}}"
+                                       disabled/>
+                                <label>Last Update</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--Inventory List-->
+                <div layout="column" class="widget-grid widget-grid-alternate panel-nobox">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Inventory</span>
+                            <span flex></span>
+                            <!--<span>Rows: {{vm.inventoryGrid.rowData.length - 1}}</span>-->
+                            <md-button ng-click="vm.showInventoryGrid = !vm.showInventoryGrid; vm.onResizeWindow()" aria-label="Show/Hide"
+                                       class="widget-button-icon" style="margin-right: 0;padding-right: 0">
+                                <i class="mdicon unfold-more"></i>
+                            </md-button>
+                        </div>
+                    </header>
+                    <div ag-grid="vm.inventoryGrid" class="ag-fresh" style="height: 80px;" ng-if="vm.showInventoryGrid"></div>
+                </div>
+
+                <md-tabs md-no-bar md-no-pagination md-no-ink md-selected="vm.selectedTabDetail" flex>
+                    <md-tab>
+                        <md-tab-body>
+                            <div layout="row" flex>
+                                <!--Itemunits List-->
+                                <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+                                    <header>
+                                        <div layout="row" flex layout-align="start center">
+                                            <span>Item Units</span>
+                                            <md-button class="md-raised md-primary widget-button"
+                                                       ng-click="vm.itemunitsAdd($event)">Add
+                                            </md-button>
+                                            <md-button class="md-raised md-warn widget-button"
+                                                       ng-click="vm.itemunitsRemove($event)">Remove
+                                            </md-button>
+                                            <span flex></span>
+                                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTabDetail = 1">Prefered Vendors
+                                            </md-button>
+                                            <span>Rows: {{vm.itemunits.items.length}}</span>
+                                        </div>
+                                    </header>
+                                    <div id="itemunitsGrid" ui-grid="vm.itemunitsGrid" ui-grid-resize-columns
+                                         ui-grid-auto-resize
+                                         ui-grid-edit ui-grid-cellNav ui-grid-selection ng-style="{height: vm.gHeightDetail}"></div>
+                                </div>
+                                <!--Price List-->
+                                <div layout="column" class="widget-grid widget-grid-edit panel-nobox" Xstyle="width: 260px">
+                                    <header>
+                                        <div layout="row" flex layout-align="start center" style="height: 36px;">
+                                            <span>Sales Price List</span>
+                                            <!--<span flex style="text-align: center; color: #212121">{{vm.itemunitsGrid.mCurrentRow.entity.fitem}}</span>-->
+                                            <span flex></span>
+                                            <span>Rows: {{vm.priceclassGrid.rowData.length}}</span>
+                                        </div>
+                                    </header>
+                                    <div ag-grid="vm.priceclassGrid" class="ag-fresh" ng-style="{height: vm.gHeightDetail}" style="width: 312px"></div>
+                                    <!--<div ui-grid="vm.priceclassGrid"-->
+                                         <!--ui-grid-resize-columns Xui-grid-edit ui-grid-cellNav ui-grid-selection-->
+                                         <!--ng-style="{height: vm.gHeightDetail}">-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                    <md-tab>
+                        <md-tab-body>
+                            <!--Itemvendors List-->
+                            <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+                                <header>
+                                    <div layout="row" flex layout-align="start center">
+                                        <span>Prefered Vendors</span>
+                                        <md-button class="md-raised md-primary widget-button"
+                                                   ng-click="vm.itemvendorsAdd()">
+                                            Add
+                                        </md-button>
+                                        <md-button class="md-raised md-warn widget-button"
+                                                   ng-click="vm.itemvendorsRemove()">
+                                            Remove
+                                        </md-button>
+                                        <span flex></span>
+                                        <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTabDetail = 0">Item Units
+                                        </md-button>
+                                        <span>Rows: {{vm.itemvendorsGrid.gridApi.grid.rows.length}}</span>
+                                    </div>
+                                </header>
+                                <div id="itemvendorsGrid" ui-grid="vm.itemvendorsGrid" ui-grid-resize-columns
+                                     ui-grid-auto-resize ui-grid-edit ui-grid-cellNav ui-grid-selection
+                                     ng-style="{height: vm.gHeightDetail}">
+                                </div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+                </md-tabs>
+
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>
+    <!--</div>-->
+
+</div>

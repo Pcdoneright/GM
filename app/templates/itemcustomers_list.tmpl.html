@@ -1,0 +1,18 @@
+<md-dialog>
+    <md-content>
+        <div layout="column" class="widget-grid panel-nobox" flex>
+            <header>
+                <div layout="row" flex layout-align="start center">
+                    <span>Customer Items</span>
+                    <span flex></span>
+                    <span>Rows: {{c.parent.itemcustomersGrid.rowData.length}}</span>
+                </div>
+            </header>
+            <div angular-grid="c.parent.itemcustomersGrid" class="ag-fresh" style="height: 400px"></div>
+        </div>
+    </md-content>
+    <div class="md-actions">
+        <md-button ng-click="c.parent.dESrvc.mdDialogCancel()">Cancel</md-button>
+        <md-button ng-click="c.parent.dESrvc.mdDialogClose()">Continue</md-button>
+    </div>
+</md-dialog>

@@ -1,0 +1,641 @@
+/*//////////////////////////////////////////////////*/
+/* Ovewrite Material Design */
+/*//////////////////////////////////////////////*/
+
+body{
+    font-size: 14px;
+    /*overflow-y:hidden !important;*/
+    /*background-color: #eee;*/
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+/* Override MD tabs since takes too much space
+ custom buttons should now be required
+ use: <md-tabs md-no-bar md-no-pagination md-no-ink > */
+md-tabs-content-wrapper {
+    top: 0 !important;
+}
+
+md-tabs-canvas {
+    height: 0;
+}
+
+/* Reduce height */
+md-input-container {
+    padding: 2px 2px 2px;
+}
+
+/*Reduce Button Height*/
+.md-button {
+    /*line-height: 2.9rem !important;*/
+    line-height: 1.3rem !important;
+    height: 1.5rem !important;
+    min-height: 20px !important;
+}
+
+/*Override to fix colors*/
+input:disabled {
+    /*color: #7F7F80;*/
+rgba(0, 0, 0, 0.541176);
+    background-color: transparent;
+}
+/*//////////////////////////////////////////////*/
+/* END */
+/*//////////////////////////////////////////////*/
+.uppercase {
+    text-transform: uppercase;
+}
+
+/*Fixes IE not centering*/
+.widget-center-center {
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform:translate(-50%,-50%);
+}
+
+.widget-md-radio-button {
+    /*box-sizing: border-box;*/
+    /*display: block;*/
+    margin: 0 5px 0 5px;
+    /*white-space: nowrap;*/
+    /*cursor: pointer;*/
+}
+
+.widget-button {
+    line-height: 2.0rem;
+
+    /*text-transform: none;*/
+    /*color: #fff !important;*/
+}
+
+.widget-button-tab {
+    color: #212121 !important;
+    background-color: #8fc9f8 !important;
+}
+
+
+.widget-error {
+    color: #f00;
+}
+
+.m-disable {
+    color:rgba(0,0,0,0.54);
+}
+
+.green-color {
+    background-color: #4cae50 !important;
+}
+
+.right-text {
+    text-align: right;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+/*------------------------------------*/
+/* angulargrid override */
+/*------------------------------------*/
+/*Allow Text Selection on Grids*/
+.ag-root {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+.ag-fresh .ag-body {
+    /* background-color: #ddd; */
+    background-color: transparent !important;
+}
+
+/*.ag-fresh .ag-body-viewport {*/
+/*background-color: transparent !important;*/
+/*}*/
+
+.ag-fresh .ag-cell {
+    border-right: 1px solid #d4d4d4 !important;
+}
+
+.ag-fresh .ag-root {
+    border: 1px solid #d4d4d4 !important;
+    font-family: inherit !important;
+}
+
+.ag-fresh .ag-header-cell-text {
+    font-weight: bold;
+}
+
+.ag-fresh .ag-header-cell {
+    border-right: 1px solid #d4d4d4 !important;
+}
+
+.ag-fresh .ag-row-selected {
+    background-color: #c0dcf0 !important;
+}
+
+.ag-fresh .ag-header-container {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(1, #fff)) !important;
+    background: -ms-linear-gradient(bottom, #eee, #fff) !important;
+    background: -moz-linear-gradient(center bottom, #eee 0, #fff 100%) !important;
+    background: -o-linear-gradient(#fff, #eee) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0) !important;
+    border-bottom: 1px solid #d4d4d4 !important;
+}
+
+/*.ag-header {*/
+/*height: 29px !important;*/
+/*}*/
+
+/*------------------------------------*/
+/* ui-grid override */
+/*------------------------------------*/
+.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+    background-color: #c0dcf0 !important;
+}
+
+.ui-grid-cell-focus {
+    border: 1px solid #2587ce;
+    background-color: #c0dcf0;
+    /*outline: 0;*/
+    /*background-color: #b3c4c7;*/
+}
+
+div.ui-grid-cell input:focus, div.ui-grid-cell select:focus {
+    color: inherit;
+    /*outline: none;*/
+    border: 1px solid #2587ce;
+    padding-left: 5px;
+    height: 28px;
+    width: 97.5%;
+}
+
+/* Override above otherwise looks zoomed */
+div.ui-grid-cell input[type="checkbox"]:focus {
+    width: auto;
+}
+
+/* Enable Text Selection */
+.ui-grid-disable-selection {
+    -webkit-user-select: text;
+}
+
+/*-------------------------------------*/
+/* TODO: Find out
+/*-------------------------------------*/
+.grid-input {
+    border: 1px solid #2587ce;
+    padding-left: 5px;
+}
+
+.widget-icon {
+    margin: 5px;
+    cursor: pointer;
+}
+
+.widget-button-icon {
+    height: 25px !important;
+    min-width: 2.0rem;
+    margin: .3rem .4rem;
+}
+
+.primary-icon {
+    /*background-color: #fff !important;*/
+    /*color: #3f51b4 !important;*/
+    color: #3F51B5 !important;
+}
+
+
+
+/*-------------------------------------*/
+/* widget-grid
+/*-------------------------------------*/
+.widget-grid.widget-grid header, .widget-toolbar {
+    color: #fff;
+    background-color: #3f51b4;
+    font-weight: bold;
+    padding: 0 10px 0 10px;
+}
+
+.widget-grid > header > div {
+    min-height: 29px;
+}
+
+.widget-toolbar {
+    padding: 0;
+}
+
+.widget-grid.widget-grid nav {
+    background-color: #d7e3f1;
+    padding-left: 10px
+}
+
+.widget-grid.widget-grid-alternate header {
+    background-color: #93959e;
+}
+
+.widget-grid.widget-grid-edit header {
+    background-color: #4CAF50;
+    /*background-color: #2E7D32;*/
+}
+
+/*-------------------------------------*/
+/* widget-table
+/*-------------------------------------*/
+.widget-table.widget-table header {
+    background-color: #93959e;
+}
+.widget-table.widget-table .pricing-price {
+    background-color: #A0A2AA;
+}
+
+.widget-table.widget-table-primary header {
+    background-color: #3849a2;
+}
+.widget-table.widget-table-primary .pricing-price {
+    background-color: #3F51B5;
+}
+
+.widget-table.widget-table-success header {
+    background-color: #449D48;
+}
+.widget-table.widget-table-success .pricing-price {
+    background-color: #4CAF50;
+}
+
+.widget-table.widget-table-warning header {
+    background-color: #ecb100;
+}
+.widget-table.widget-table-warning .pricing-price {
+    background-color: #FFC107;
+}
+
+.widget-table.widget-table-danger header {
+    background-color: #f32c1e;
+}
+.widget-table.widget-table-danger .pricing-price {
+    background-color: #F44336;
+}
+
+.widget-table.widget-table-info header {
+    background-color: #00a5bb;
+}
+.widget-table.widget-table-info .pricing-price {
+    background-color: #00BCD4;
+}
+
+.widget-table.widget-table-other header {
+    background-color: #564aa3;
+}
+.widget-table.widget-table-other .pricing-price {
+    background-color: #7266ba;
+}
+
+.panel, .panel-nobox {
+    background-color: #fff;
+    margin: 5px 5px 0px 5px;
+}
+
+.panel {
+    /*margin: 0px 0px 0px 0px;*/
+    -webkit-transition: .25s ease-out;
+    -moz-transition: .25s ease-out;
+    transition: .25s ease-out;
+    /*box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);*/
+    position: relative;
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+}
+
+.panel-nobox {
+    /*margin: 5px 10px 0px 10px;*/
+    -webkit-transition: .25s ease-out;
+    -moz-transition: .25s ease-out;
+    transition: .25s ease-out;
+    position: relative;
+}
+
+.panel-form {
+    margin: 0px 5px 0px 5px;
+}
+.panel-form form{
+    -webkit-transition: .25s ease-out;
+    -moz-transition: .25s ease-out;
+    transition: .25s ease-out;
+    position: relative;
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+}
+
+.widget-table {
+    /*margin-bottom: 5px;*/
+    margin: 5px;
+    background-color: #fcfcfc;
+    color: #999;
+    text-align: center;
+    -webkit-transition: .25s ease-out;
+    -moz-transition: .25s ease-out;
+    transition: .25s ease-out;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+    position: relative;
+}
+
+.widget-table header {
+    text-align: center;
+    padding: 8px 8px;
+}
+
+.widget-table header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.widget-table .pricing-price {
+    border-bottom: 1px solid #e7edf6;
+    padding: 20px 15px;
+    background-color: #A0A2AA;
+    font-size: 36px;
+    line-height: 1;
+    color: #fff;
+    font-weight: 300;
+}
+
+.widget-table .pricing-price .pricing-sign {
+    margin-right: 5px;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+/* IE does not understand layout-fill */
+/*.fill{*/
+/*height: 100%;*/
+/*width: 100%;*/
+/*}*/
+
+#myHourGlass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    /*background-color:grey;*/
+    /*opacity: .8;*/
+}
+
+.hourGlass-loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px;
+    -1 *image width / 2 margin-top : - 32 px;
+    -1 *image height / 2 display : block;
+}
+
+/*==============================*/
+/*SideNav Menu*/
+/*==============================*/
+.menu-sidenav {
+    /*background-color: #252833;*/
+    background-color: #32404e;
+}
+
+.menu-content {
+    background-color: #32404e !important;
+    overflow-x: hidden;
+}
+
+.menu-group, .menu-item {
+    line-height: 2.9rem;
+    height: 2.9rem;
+    text-align: left;
+    width: 100%;
+    background-color: #32404e;
+    color: #c9c9cc;
+}
+
+.menu-item {
+    margin-left: 20px;
+    text-transform: none;
+    color: #ffffff;
+}
+
+.menu-item:focus {
+    font-weight: bold;
+}
+
+/*.vertical-text {*/
+/*-webkit-transform: rotate(90deg);*/
+/*-moz-transform: rotate(90deg);*/
+/*-o-transform: rotate(90deg);*/
+/*-ms-transform: rotate(90deg);*/
+/*transform: rotate(90deg);*/
+/*}*/
+
+/*//////////////////////////////////////////////////*/
+/* <input> Within <div class=mFeld> */
+/*//////////////////////////////////////////////*/
+.m-input-container {
+    position:relative;
+    margin-top:10px;
+    margin-right: 5px;
+}
+
+.m-input-container > label {
+    position:absolute;
+    left:2px; top:0; transition: all .2s linear;
+    color:rgba(0,0,0,0.54);
+    font-size:75%;
+}
+/* Field: No Box, Border Only Bottom */
+.m-input-container > input, .m-input-container > select {
+    margin-top:17px;
+    border-width: 0 0 1px;
+    border-color: rgba(0,0,0,0.12);
+    padding:3px -5px;
+    width: 100%;
+    margin-bottom: 1px;
+}
+
+.m-input-container > input[type="date"] {
+    margin-top:14px;
+}
+
+.m-input-container > input:focus, .m-input-container > select:focus {
+    border-bottom: 2px solid rgb(63, 81, 181) !important;
+    margin-bottom: 0;
+    outline: 0;
+}
+
+/* Fields used in columns like grid with no label */
+.m-input-inline { margin-top:5px;}
+
+.m-input-inline > input, .m-input-inline > select {
+    border-width: 0 0 1px;
+    border-color: rgba(0,0,0,0.12);
+    padding:3px;
+    width: 100%;
+    margin-bottom: 1px;
+}
+
+.m-input-inline > input:focus, .m-input-inline > select:focus {
+    border-bottom: 2px solid rgb(63, 81, 181) !important;
+    margin-bottom: 0;
+    outline: 0;
+}
+
+.m-input-inline > input[type="date"] {
+    margin-top:-8px;
+}
+
+/*/!* Hide Top Label if input invalid (s/b empty) *!/*/
+/*.m-input-container > input:invalid + label, .m-input-container > select:invalid + label {*/
+/*top:3px; opacity:0;*/
+/*}*/
+
+/* When focus set label color */
+.m-input-container > input:focus + label, .m-input-container > select:focus + label {
+    color:rgb(63, 81, 181);
+    /*opacity:1; top:0; /!* When focus always show on top *!/*/
+}
+/*/!* Hide Placeholder when focus *!/*/
+/*.m-input-container > input:focus::-webkit-input-placeholder, .m-input-container > select:focus::-webkit-input-placeholder { color:transparent; }*/
+/*.m-input-container > input:focus:-moz-placeholder, .m-input-container > select:focus:-moz-placeholder { color:transparent; }*/
+
+.mlabel {
+    /*position:absolute;*/
+    left:2px; top:0; transition: all .2s linear;
+    color:rgba(0,0,0,0.54);
+    font-size:75%;
+}
+
+.mGrid {
+    color:#616161;
+    /*color: #c0dcf0;*/
+    text-align: left;
+}
+
+/*-------------------------------------------------------------*/
+/* FlexGrid create a 'custom-flex-grid' theme for the FlexGrid */
+/*-------------------------------------------------------------*/
+.custom-flex-grid {
+    border-radius: 0;
+}
+
+.custom-flex-grid .wj-state-selected {
+    background: #c0dcf0;
+    color: #000;
+    border: 1px solid #157ecb;
+}
+
+.custom-flex-grid .wj-state-multi-selected {
+    background: #c0dcf0;
+    color: #000;
+}
+
+/*-------------*/
+/*FlexInput*/
+/*-------------*/
+.m-number-input { position:relative; }
+.m-number-input > label { position: absolute; background: blue; left:0; top: 0; cursor: pointer; }
+/*.m-number-input > input,  .m-number-input > label { padding: 0; line-height: 20px; }*/
+/*.m-number-input > input,  .m-number-input > label { padding: 0; border: 1px solid black; line-height: 20px; }*/
+.m-number-input > input:focus + label { display: none; }
+
+/* label { position: absolute; background: white; left:0px; top: 0px; cursor: pointer; }*/
+/* input { position: relative; width: 200px; }*/
+/* input, label { padding: 0; border: 1px solid black; width: 200px; font-family: Arial; line-height: 20px; }*/
+/* input:focus + label { display: none; }*/
+
+
+.m-input-container-kui {
+    position:relative;
+    margin-top:10px;
+    height: 26px; /* Prevent screen from resizing */
+}
+
+.m-input-container-kui > label {
+    position:absolute;
+    left:2px; top:-10px; transition: all .2s linear;
+    color:rgba(0,0,0,0.54);
+    font-size:75%;
+}
+
+.m-input-container-kui > span > span {
+    border-width: 0 0 1px;
+    border-color: rgba(0,0,0,0.12);
+    border-radius: 0;
+}
+
+.m-input-container-kui > span > span > input:last-child:focus {
+    border-bottom: 2px solid rgb(63, 81, 181) !important;
+    margin-bottom: 0;
+}
+
+.m-input-container-wj {
+    height: 26px; /* Prevent screen from resizing */
+}
+
+
+.m-input-container-wj > div {
+    border-width: 0 0 1px;
+    border-color: rgba(0,0,0,0.12);
+    border-radius: 0; /* combobox */
+}
+
+/* combobox remove box  */
+.m-input-container-wj > div > div > div > div > span:last-child > button {
+    border-left-width: 0 !important;
+}
+
+.m-input-container-wj > div > div > div > input:focus {
+    border-bottom: 2px solid rgb(63, 81, 181) !important;
+    margin-bottom: 0;
+}
+
+/* combobox and its button */
+.m-input-container-wj > div > div > div > div > input:focus, input:focus+span {
+    border-bottom: 2px solid rgb(63, 81, 181) !important;
+    margin-bottom: 0;
+}
+
+/*TODO find out last label*/
+/*.m-input-container-wj > div > div > div > input:focus > label {*/
+/*color:rgb(63, 81, 181);*/
+/*opacity:1; top:0;  When focus always show on top */
+/*}*/
+
+.m-input-container-wj {
+    position:relative;
+    margin-top:20px;
+}
+
+.m-input-container-wj > label {
+    position:absolute;
+    left:2px; top:-15px; transition: all .2s linear;
+    color:rgba(0,0,0,0.54);
+    font-size:75%;
+}
+
+/*aling left <wj-input-number> */
+/*Find second element that is input after 2 div down*/
+.m-wj-input-number-aling-left > div > div > input:nth-child(2) {
+    text-align: left !important;
+}
+
+/*---------------------*/
+/*Button used as Tabs*/
+/*---------------------*/
+.m-buttontab-focus {
+    background-color: rgba(158,158,158,0.2);
+}
+

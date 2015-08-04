@@ -1,0 +1,29 @@
+<div layout="column" ng-controller="codeMaint as vm" flex>
+    <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+        <header>
+            <div layout="row" flex layout-align="start center">
+                <span>Master</span>
+                <md-button class="md-raised md-primary widget-button" ng-click="vm.update()"><i class="mdicon save"></i> Save
+                </md-button>
+                <span flex></span>
+                <span>Rows: {{vm.codemasterGrid.rowData.length}}</span>
+            </div>
+        </header>
+        <div ag-grid="vm.codemasterGrid" class="ag-fresh" style="height: 290px"></div>
+    </div>
+
+    <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+        <header>
+            <div layout="row" flex layout-align="start center">
+                <span>Details</span>
+                <md-button class="md-raised md-primary widget-button" ng-click="vm.codeAdd($event)">Add</md-button>
+                <md-button class="md-raised md-warn widget-button" ng-click="vm.codeRemove($event)">Remove</md-button>
+                </md-button>
+                <span flex></span>
+                <span>Rows: {{vm.codedetailGrid.gridApi.grid.rows.length}}</span>
+            </div>
+        </header>
+        <div ui-grid="vm.codedetailGrid" style="min-height: 200px" ng-style="{height: vm.gHeight}"
+             ui-grid-resize-columns ui-grid-auto-resize ui-grid-edit ui-grid-cellNav ui-grid-selection></div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<!--<div layout="column" layout-fill ng-controller="mainMenuCtrl as mm">-->
+<div layout="column" layout-fill ng-controller="mainMenuCtrl as mm">
+
+    <!--Top Bar-->
+    <div layout="row" layout-align="start center" class="widget-toolbar" tabindex="-1" style="font-size: 16px;">
+        <md-button ng-click="mm.toggleLeftMenu()" aria-label="Refresh" class="widget-button-icon">
+            <i class="mdicon menu"></i>
+        </md-button>
+        <!--<i class="mdicon menu Xmdicon-xs widget-icon" ng-click="mm.toggleLeftMenu()"></i>-->
+        <span>{{::companyName}} {{::companyVersion}}</span>
+        <span flex style="text-align: center">{{mm.tabs[mm.selectedIndex].title}}</span>
+        <span>{{::mm.fname}}</span>
+        <md-button onclick="location.reload();" aria-label="logout" class="widget-button-icon">
+            <i class="mdicon locked"></i>
+        </md-button>
+        <md-button ng-click="mm.toggleFullScreen()" aria-label="Full/Resume Screen" class="widget-button-icon">
+            <i class="mdicon unfold-more"></i>
+        </md-button>
+    </div>
+
+    <!--&lt;!&ndash;<div layout="row" Xstyle="min-height: 95.2vh; Xpadding-top: 30px">&ndash;&gt;-->
+    <div layout="row" flex layout-fill>
+        <!--Left Menu-->
+        <md-sidenav layout="column" class="md-whiteframe-z2 menu-sidenav" md-component-id="left"
+                    md-is-locked-open="mm.menuOpen">
+            <md-content class="menu-content">
+                <div ng-repeat="menus in ::mm.menu">
+                    <md-button class="menu-group" ng-click="toggleSelectSection(menus.index)">
+                        {{::menus.groupname}}
+                    </md-button>
+                    <md-button ng-repeat="submenu in ::menus.submenu | orderBy: 'seq'" class="menu-item"
+                               ng-click="addTab(submenu)" ng-if="isSectionSelected(submenu.index)">
+                        {{::submenu.prog}}
+                    </md-button>
+                </div>
+                <!--Active Tabs-->
+                <div ng-if="mm.tabs.length > 0">
+                    <md-button class="menu-group" Xng-click="toggleSelectSection(menus.index)">Active</md-button>
+                    <md-button ng-repeat="tab in mm.tabs" class="menu-item" ng-click="addTab({prog:tab.title})"
+                               Xng-if="isSectionSelected(submenu.index)">
+                        {{::tab.title}}
+                        <md-icon class='mdicon cancel' style="padding-left: 5px;"
+                                 ng-click='removeTab(tab)'></md-icon>
+                    </md-button>
+                </div>
+            </md-content>
+        </md-sidenav>
+
+        <!--Tab Pages-->
+        <md-tabs md-no-bar md-no-pagination md-no-ink flex md-selected="mm.selectedIndex" ng-if="mm.tabs.length > 0"
+                 md-dynamic-height="true">
+            <md-tab ng-repeat="tab in mm.tabs">
+                <!--<md-tab-label>{{::tab.title}}-->
+                <!--<md-icon class='mdicon cancel' ng-click='removeTab(tab)'></md-icon>-->
+                <!--</md-tab-label>-->
+                <md-tab-body>
+                    <div ng-include="tab.content" flex layout="column" layout-fill></div>
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+
+        <!--Logo-->
+        <div flex layout="row" layout-align="center center" ng-if="mm.tabs.length === 0">
+            <img Xstyle="width: 375px; height: 375px;" src="images/logo.PNG">
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,270 @@
+<div flex layout="column" class="panel-nobox" ng-controller="custmaint as vm" ng-init="vm.showMoreEdit=true">
+    <md-tabs md-no-bar md-no-pagination md-no-ink md-selected="vm.selectedTab" flex md-dynamic-height="true">
+        <md-tab Xlabel="List">
+            <md-tab-body>
+                <!--Customer List Grid-->
+                <div layout="column" class="widget-grid">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Customer List</span>
+                            <md-button
+                                    ng-click="vm.retrieveCust(vm.listCustomerGrid.selectedRows[0].fcid); vm.selectedTab = 1;"
+                                    aria-label="Edit Selection" class="md-raised widget-button green-color"
+                                    style="margin-left: 20px;color:#fff">Edit
+                            </md-button>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 1">Entry
+                            </md-button>
+                            <span>Rows: {{vm.listCustomerGrid.rowData.length}}</span>
+                        </div>
+                    </header>
+                    <!--Customer List Options-->
+                    <nav layout="row" layout-align="start center">
+                        <label>Search By:</label>
+                        <md-radio-group ng-model="vm.ctype" layout="row" layout-align="start start">
+                            <md-radio-button value="N" aria-label="customer" class="widget-md-radio-button">Name</md-radio-button>
+                            <md-radio-button value="A" aria-label="all" class="widget-md-radio-button">All Customers</md-radio-button>
+                        </md-radio-group>
+                        <md-button ng-click="vm.listCustomerGridSearch = ''; vm.listCustomerGridRefresh('ALL')" aria-label="Refresh"
+                                   class="md-raised md-primary widget-button-icon" style="margin-left: 10px"
+                                   ng-if="vm.ctype == 'A'">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.listCustomerGridSearch"
+                                   ng-model-options="{debounce: 800}"
+                                   ng-change="vm.listCustomerGridRefresh(vm.listCustomerGridSearch)"
+                                   placeholder="Name (Min 3 Characters)" auto-focus style="width: 250px"/>
+                        </md-input-container>
+                    </nav>
+                    <div angular-grid="vm.listCustomerGrid" class="ag-fresh" ng-style="{height: vm.gHeight}"></div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+
+        <md-tab Xlabel="Entry">
+            <md-tab-body>
+                <div layout="column" class="widget-grid widget-grid-edit panel-form">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Properties</span>
+                            <md-button class="md-raised md-primary widget-button" ng-click="vm.update()">Save
+                            </md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.createCust(event$)">New Customer
+                            </md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.printPL(0)"><i
+                                    class="mdicon printer"></i> Price List
+                            </md-button>
+                            <span ng-if="!vm.validEntry()" class="widget-error"
+                                  style="padding-left: 30px">NO CHANGES CAN BE SAVED</span>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 0">List</md-button>
+                            <md-button ng-click="vm.toggleShowMoreEdit()" aria-label="Show/Hide"
+                                       class="widget-button-icon" style="margin-right: 0;padding-right: 0">
+                                <i class="mdicon unfold-more"></i>
+                            </md-button>
+                        </div>
+                    </header>
+                    <nav layout="row" layout-align="start center">
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.searchId" upper-case placeholder="Customer ID" style="width: 200px"/>
+                        </md-input-container>
+                        <md-button ng-click="vm.searchNumber()" aria-label="Find"
+                                   class="md-raised md-primary widget-button-icon">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                    </nav>
+                    <form layout="row">
+                        <div flex>
+                            <div layout="row" layout-align="center end">
+                                <div class="m-input-container" style="width: 200px;">
+                                    <input type='text' ng-model="vm.customers.items[0].fcid" disabled/>
+                                    <label>ID</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.customers.items[0].fname" id="fname"/>
+                                    <label>Name</label>
+                                </div>
+                                <md-checkbox ng-model="vm.customers.items[0].factive" aria-label="Active" style="width: 130px">
+                                    Active
+                                </md-checkbox>
+                                <md-checkbox ng-model="vm.customers.items[0].fistaxexcempt" aria-label="Taxable" style="width: 130px">Tax Exempt
+                                </md-checkbox>
+                            </div>
+
+                            <div layout="row">
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.customers.items[0].fpcid"
+                                            ng-options="opt.fpcid as opt.fdescription for opt in ::vm.priceclasses"
+                                            placeholder="Tax Rate" Xng-model-options="{updateOn: 'blur'}" ng-change="vm.customeritemCalcPrice()"></select>
+                                    <label>Price Class</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.customers.items[0].fterms"
+                                            ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'CTR'} : true"
+                                            placeholder="Terms"></select>
+                                    <label>Terms</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.customers.items[0].fshipmethod"
+                                            ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'SOSM'} : true"
+                                            placeholder="Terms"></select>
+                                    <label>Shipping Method</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.customers.items[0].fspid"
+                                            ng-options="opt.fspid as opt.fname for opt in ::vm.salespersons"
+                                            placeholder="Representative"></select>
+                                    <label>Sales Person</label>
+                                </div>
+                            </div>
+
+                            <div ng-if="vm.showMoreEdit">
+                                <div layout="row">
+                                    <div class="m-input-container" flex>
+                                        <select ng-model="vm.customers.items[0].ftype"
+                                                ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'CTP'} : true"
+                                                placeholder="Terms"></select>
+                                        <label>Type</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <select ng-model="vm.customers.items[0].fterritory"
+                                                ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'TRT'} : true"
+                                                placeholder="Terms"></select>
+                                        <label>Territory</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].femail"
+                                               ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <select ng-model="vm.customers.items[0].fgetpricelist"
+                                                ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'CPL'} : true"
+                                                placeholder="Price List"></select>
+                                        <label>Get Price List</label>
+                                    </div>
+                                </div>
+
+                                <div layout="row">
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].fresalecertificate" ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Resale Certificate</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].fphone1" phone-number/>
+                                        <label>Phone</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].fphone2" phone-number/>
+                                        <label>Fax</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].fcontact" ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Contact</label>
+                                    </div>
+                                </div>
+
+                                <div layout="row">
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].faddress1"/>
+                                        <label>Address1</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='text' ng-model="vm.customers.items[0].faddress2"/>
+                                        <label>Address2</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <select ng-model="vm.customers.items[0].fcity"
+                                                ng-options="opt.fid as opt.fid for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'CITY'} : true"
+                                                placeholder="Terms"></select>
+                                        <!--<input type='text' ng-model="vm.customers.items[0].fcity"/>-->
+                                        <label>City</label>
+                                    </div>
+                                    <div class="m-input-container" style="width: 90px;">
+                                        <input type='text' ng-model="vm.customers.items[0].fstate" max-length="2"/>
+                                        <label>State</label>
+                                    </div>
+                                    <div class="m-input-container" style="width: 90px;">
+                                        <input type='text' ng-model="vm.customers.items[0].fzip"/>
+                                        <label>Zip</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row">
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.customers.items[0].fnotes"
+                                           ng-model-options="{updateOn: 'blur'}"/>
+                                    <label>Notes</label>
+                                </div>
+                                <div class="m-input-container" flex="25">
+                                    <input type='text' value="{{vm.customers.items[0].ts | date:'yyyy/MM/dd H:mm a'}} {{vm.customers.items[0].fby}}" disabled/>
+                                    <label>Last Update</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <md-tabs md-no-bar md-no-pagination md-no-ink md-selected="vm.selectedTab2" flex md-dynamic-height="true">
+                    <md-tab Xlabel="List">
+                        <md-tab-body>
+                            <!--Customeritems-->
+                            <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+                                <header>
+                                    <div layout="row" flex layout-align="start center">
+                                        <span>Items</span>
+                                        <md-button class="md-raised md-primary widget-button" ng-click="vm.itemsAdd($event)">Add</md-button>
+                                        <md-button class="md-raised md-warn widget-button" ng-click="vm.itemsRemove($event)">Remove</md-button>
+                                        <md-button class="md-raised widget-button" ng-click="vm.lastpriceupdate()">Last-Price Update</md-button>
+                                        <md-button class="md-raised widget-button" ng-click="vm.printPL(1)">
+                                            <i class="mdicon printer"></i> New Price List
+                                        </md-button>
+                                        <span flex></span>
+                                        <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab2 = 1">Locations</md-button>
+                                        <span>Rows: {{vm.customeritemsGrid.gridApi.grid.rows.length}}</span>
+                                    </div>
+                                </header>
+                                <nav layout="row" layout-align="start center">
+                                    <md-input-container md-no-float>
+                                        <input type='text' ng-model="vm.fitem" ng-model-options="{updateOn: 'blur'}"
+                                               ng-change="vm.fitemOnChange()"
+                                               placeholder="Scan Item To Add" style="width: 200px"/>
+                                    </md-input-container>
+                                </nav>
+                                <div ui-grid="vm.customeritemsGrid" style="min-height: 100px"
+                                     ng-style="{height: vm.customeritemsHeight}" ui-grid-resize-columns
+                                     ui-grid-auto-resize ui-grid-edit ui-grid-cellNav ui-grid-selection></div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+
+                    <md-tab Xlabel="List">
+                        <md-tab-body>
+                            <!--Customerlocations-->
+                            <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+                                <header>
+                                    <div layout="row" flex layout-align="start center">
+                                        <span>Locations</span>
+                                        <md-button class="md-raised md-primary widget-button" ng-click="vm.locationsAdd($event)">Add</md-button>
+                                        <md-button class="md-raised md-warn widget-button" ng-click="vm.locationsRemove($event)">Remove</md-button>
+                                        <md-button class="md-raised widget-button" ng-click="vm.copyAddress()">Copy Address</md-button>
+                                        <span flex></span>
+                                        <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab2 = 0">Items</md-button>
+                                        <span>Rows: {{vm.customerlocationsGrid.gridApi.grid.rows.length}}</span>
+                                    </div>
+                                </header>
+                                <div ui-grid="vm.customerlocationsGrid" style="min-height: 100px"
+                                     ng-style="{height: vm.customerlocationsHeight}" ui-grid-resize-columns
+                                     ui-grid-auto-resize ui-grid-edit ui-grid-cellNav ui-grid-selection></div>
+                            </div>
+                        </md-tab-body>
+                    </md-tab>
+
+                </md-tabs>
+
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>
+</div>

@@ -1,0 +1,38 @@
+<div class="vertical-align" style="height: 100vh; background-color: #eee;" ng-controller="myController as c">
+    <div class="md-whiteframe-z3 panel" style="width: 360px; float:none; margin:0 auto; padding: 0">
+        <md-toolbar>
+            <h2 class="md-toolbar-tools" layout-align="center">
+                <span>{{companyName}}</span>
+            </h2>
+        </md-toolbar>
+
+        <br>
+        <div layout="row" layout-align="center">
+            <img style="width: 291px; height: 111px;" src="images/logo.PNG">
+        </div>
+
+        <form name="myForm" ng-submit="myForm.$valid && c.ofLogin()" novalidate style="padding: 10px;">
+            <md-input-container flex md-no-float>
+                <md-icon class="mdicon user mdicon-xs"></md-icon>
+                <input ng-model="c.userid" name="userid" required auto-focus placeholder="User ID">
+
+                <div ng-messages="myForm.$submitted && myForm.userid.$error">
+                    <div ng-message="required">User ID is required!</div>
+                </div>
+            </md-input-container>
+
+            <br>
+            <md-input-container flex md-no-float>
+                <md-icon class="mdicon locked mdicon-xs"></md-icon>
+                <input name="password" ng-model="c.password" type="password" required placeholder="Password">
+
+                <div ng-messages="myForm.$submitted && myForm.password.$error">
+                    <div ng-message="required">Password is required!</div>
+                </div>
+            </md-input-container>
+
+            <br>
+            <md-button class="md-raised md-primary" style="width: 97%;height: 2.0rem !important;">Login</md-button>
+        </form>
+    </div>
+</div>

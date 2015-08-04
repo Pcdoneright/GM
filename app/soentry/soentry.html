@@ -1,0 +1,298 @@
+<style type="text/css">
+    .left { margin-top:5px; width: 100px; }
+    .right { width: 130px !important; text-align: right}
+    .balance {background-color: #000 !important; color: #00fd01;}
+</style>
+
+<div flex layout="column" class="panel-nobox" ng-controller="soentryCtrl as vm" ng-init="vm.showMoreEdit=true">
+    <md-tabs  md-no-bar md-no-pagination md-no-ink md-selected="vm.selectedTab" flex md-dynamic-height="true">
+        <md-tab Xlabel="List">
+            <md-tab-body>
+                <!--Customer List Grid-->
+                <div layout="column" class="widget-grid">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Customer List</span>
+                            <md-button
+                                    ng-click="vm.createSO(vm.listCustomerGrid.selectedRows[0]); vm.selectedTab = 1;"
+                                    aria-label="Edit Selection" class="md-raised widget-button green-color"
+                                    style="margin-left: 20px;color:#fff">Create S.O.
+                            </md-button>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 1">Entry</md-button>
+                            <span>Rows: {{vm.listCustomerGrid.rowData.length}}</span>
+                        </div>
+                    </header>
+                    <!--Customer List Options-->
+                    <nav layout="row" layout-align="start center">
+                        <label>Search By:</label>
+                        <md-radio-group ng-model="vm.ctype" layout="row" layout-align="start start">
+                            <md-radio-button value="N" aria-label="customer" class="widget-md-radio-button">Name</md-radio-button>
+                            <md-radio-button value="A" aria-label="all" class="widget-md-radio-button">All Customers</md-radio-button>
+                        </md-radio-group>
+                        <md-button ng-click="vm.listCustomerGridSearch = ''; vm.listCustomerGridRefresh('ALL')" aria-label="Refresh"
+                                   class="md-raised md-primary widget-button-icon" style="margin-left: 10px"
+                                   ng-if="vm.ctype == 'A'">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.listCustomerGridSearch"
+                                   ng-model-options="{debounce: 800}"
+                                   ng-change="vm.listCustomerGridRefresh(vm.listCustomerGridSearch)"
+                                   placeholder="Name (Min 3 Characters)" auto-focus style="width: 250px"/>
+                        </md-input-container>
+                    </nav>
+                    <div angular-grid="vm.listCustomerGrid" class="ag-fresh" style="height: 200px"></div>
+                </div>
+
+                <!--SO List Grid-->
+                <div layout="column" class="widget-grid" style="margin-top: 5px">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Order List</span>
+                            <md-button
+                                    ng-click="vm.selectedTab = 1; vm.retrieveSO(vm.listSOGrid.selectedRows[0].fsoid);"
+                                    aria-label="Edit Selection" class="md-raised widget-button green-color"
+                                    style="margin-left: 20px;color:#fff">Edit
+                            </md-button>
+                            <span flex></span>
+                            <span>Rows: {{vm.listSOGrid.rowData.length}}</span>
+                        </div>
+                    </header>
+                    <!--PO List Options-->
+                    <nav layout="row" layout-align="start center">
+                        <md-radio-group ng-model="vm.sotype" layout="row" layout-align="start start">
+                            <md-radio-button value="C" aria-label="vendor" class="widget-md-radio-button">Selected Customer</md-radio-button>
+                            <md-radio-button value="D" aria-label="date" class="widget-md-radio-button">Date</md-radio-button>
+                        </md-radio-group>
+                        <label>From:</label>
+                        <md-input-container md-no-float>
+                            <input type='date' ng-model="vm.sodatef" ng-model-options="{updateOn: 'blur'}"
+                                   style="width: 130px" aria-label="Date From"/>
+                        </md-input-container>
+                        <label>To:</label>
+                        <md-input-container md-no-float>
+                            <input type='date' ng-model="vm.sodatet" ng-model-options="{updateOn: 'blur'}"
+                                   style="width: 130px" aria-label="Date To"/>
+                        </md-input-container>
+                        <label>Status:</label>
+                        <div class="m-input-inline">
+                            <select ng-model="vm.sostatus" style="width: 150px; background-color: transparent"
+                                    ng-options="opt.fid as opt.fdescription for opt in vm.orderstatus"
+                                    placeholder="Status">
+                            </select>
+                        </div>
+                        <md-button ng-click="vm.listSOGridRefresh()" aria-label="Refresh"
+                                   class="md-raised md-primary widget-button-icon" style="margin-left: 10px">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                    </nav>
+                    <div angular-grid="vm.listSOGrid" class="ag-fresh" ng-style="{height: vm.gHeight}"></div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <md-tab Xlabel="Entry">
+            <md-tab-body>
+                <div layout="column" class="widget-grid widget-grid-edit panel-form">
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Properties</span>
+                            <md-button class="md-raised md-primary widget-button" ng-click="vm.update()">Save</md-button>
+                            <md-button disabled class="md-raised widget-button" ng-click="vm.complete($event)">Invoice</md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.voidSO($event)">Void</md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.printSO('I')"><i class="mdicon printer"></i> Receipt</md-button>
+                            <span ng-if="vm.validEntry() == false" class="widget-error"
+                                  style="padding-left: 30px">NO CHANGES CAN BE SAVED</span>
+                            <span flex></span>
+                            <md-button class="md-raised widget-button-tab" ng-click="vm.selectedTab = 0">List</md-button>
+                            <md-button ng-click="vm.toggleShowMoreEdit()" aria-label="Show/Hide"
+                                       class="widget-button-icon" style="margin-right: 0;padding-right: 0">
+                                <i class="mdicon unfold-more"></i>
+                            </md-button>
+                        </div>
+                    </header>
+                    <nav layout="row" layout-align="start center">
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.searchId" ng-model-options="{updateOn: 'blur'}"
+                                   placeholder="S.O. Number" style="width: 100px"/>
+                        </md-input-container>
+                        <md-button ng-click="vm.searchSONumber()" aria-label="Find"
+                                   class="md-raised md-primary widget-button-icon">
+                            <i class="mdicon search"></i>
+                        </md-button>
+                    </nav>
+                    <form layout="row">
+                        <div flex>
+                            <div layout="row" layout-align="center end">
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.salesorders.items[0].cfcid" disabled/>
+                                    <label>Customer</label>
+                                </div>
+                                <div class="m-input-container" flex="25">
+                                    <input type='text' ng-model="vm.salesorders.items[0].fponumber"/>
+                                    <label>Customer PO</label>
+                                </div>
+                            </div>
+
+                            <div layout="row">
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.salesorders.items[0].fspid"
+                                            ng-options="opt.fspid as opt.fname for opt in ::vm.salespersons"
+                                            placeholder="salespersons"></select>
+                                    <label>Sales Rep.</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.salesorders.items[0].fshipmethod"
+                                            ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'SOSM'} : true"
+                                            placeholder="Shipping Method">
+                                    </select>
+                                    <label>Shipping Method</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <select ng-model="vm.salesorders.items[0].fterms"
+                                            ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'CTR'} : true"
+                                            placeholder="terms">
+                                    </select>
+                                    <label>Payment Terms</label>
+                                </div>
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.salesorders.items[0].cfdescription" disabled/>
+                                    <label>Price Class</label>
+                                </div>
+                            </div>
+                            <div ng-if="vm.showMoreEdit">
+                                <div layout="row">
+                                    <div class="m-input-container" flex>
+                                        <input type='date' ng-model="vm.salesorders.items[0].fshipdate" ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Ship Date</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <input type='date' ng-model="vm.salesorders.items[0].fduedate" ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Due Date</label>
+                                    </div>
+                                    <div class="m-input-container" flex>
+                                        <select ng-model="vm.salesorders.items[0].fshiptoid"
+                                                ng-options="opt.flocid as opt.fname for opt in vm.customerlocations"
+                                                placeholder="Contacts"></select>
+                                        <label>Ship To</label>
+                                    </div>
+                                </div>
+
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.salesorders.items[0].fpackingnotes"
+                                           ng-model-options="{updateOn: 'blur'}"/>
+                                    <label>Packing Notes</label>
+                                </div>
+
+                                <div class="m-input-container" flex>
+                                    <input type='text' ng-model="vm.salesorders.items[0].fnotes"
+                                           ng-model-options="{updateOn: 'blur'}"/>
+                                    <label>Order Notes</label>
+                                </div>
+
+                                <div layout="row">
+                                    <div class="m-input-container" flex="75">
+                                        <input type='text' ng-model="vm.salesorders.items[0].finvoicenotes"
+                                               ng-model-options="{updateOn: 'blur'}"/>
+                                        <label>Invoice Notes</label>
+                                    </div>
+                                    <div class="m-input-container" flex="25">
+                                        <input type='text'
+                                               value="{{vm.salesorders.items[0].ts | date:'yyyy/MM/dd H:mm a'}} {{vm.salesorders.items[0].fusername}}"
+                                               disabled/>
+                                        <label>Last Update</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Right Side Totals-->
+                        <div class="panel" style="margin-right: 0">
+                            <div ng-if="vm.showMoreEdit">
+                                <div layout="row">
+                                    <span class="left m-disable">Order Date:</span>
+                                    <div class="m-input-inline">
+                                        <input class="right" type="date" ng-model="vm.salesorders.items[0].fdate" style="text-align: left" disabled/>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <span class="left">Invoice Date:</span>
+                                    <div class="m-input-inline">
+                                        <input class="right" type="date" ng-model="vm.salesorders.items[0].finvoice_date" style="text-align: left"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row">
+                                <span class="left m-disable">Order #:</span>
+                                <div class="m-input-inline">
+                                    <input class="right" type="text" ng-model="vm.salesorders.items[0].fdocnumber" disabled style="text-align: left"/>
+                                </div>
+                            </div>
+
+                            <div ng-if="vm.showMoreEdit">
+                                <div layout="row">
+                                    <span class="left m-disable">Status:</span>
+                                    <div class="m-input-inline">
+                                        <select class="right" ng-model="vm.salesorders.items[0].fstatus"
+                                                ng-options="opt.fid as opt.fdescription for opt in vm.dESrvc.codeTable | filter: {fgroupid: 'SOS'} : true"
+                                                placeholder="Status" style="width: 140px!important;" disabled>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <span class="left m-disable">Sub Total:</span>
+                                    <div class="m-input-inline">
+                                        <input class="right" type="text" ng-model="vm.salesorders.items[0].cfsubtotal" valid-number
+                                               format-value="currency" model-value="float" disabled/>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <span class="left m-disable">Tax:</span>
+                                    <div class="m-input-inline">
+                                        <input class="right" type="text" ng-model="vm.salesorders.items[0].ftax" valid-number
+                                               format-value="currency" model-value="float" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div layout="row">
+                                <span class="left m-disable">Total:</span>
+                                <div class="m-input-inline">
+                                    <input class="right" type="text" ng-model="vm.salesorders.items[0].ftotal" valid-number
+                                           format-value="currency" model-value="float" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Details-->
+                <div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex>
+                    <header>
+                        <div layout="row" flex layout-align="start center">
+                            <span>Details</span>
+                            <md-button class="md-raised md-primary widget-button" ng-click="vm.salesdetailsAdd()">Add</md-button>
+                            <md-button class="md-raised md-warn widget-button" ng-click="vm.salesdetailsRemove($event)">Remove</md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.addCustomerItems($event)">Add From List<md-tooltip>Add From Customer Items List</md-tooltip></md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.viewHistory($event)">History</md-button>
+                            <md-button class="md-raised widget-button" ng-click="vm.saveFavorites()"><i class="mdicon grade"></i> Save To List<md-tooltip>Save To Customer Items List</md-tooltip></md-button>
+                            <span flex></span>
+                            <span>Rows: {{vm.salesdetailsGrid.gridApi.grid.rows.length}}</span>
+                        </div>
+                    </header>
+                    <nav layout="row" layout-align="start center">
+                        <md-input-container md-no-float>
+                            <input type='text' ng-model="vm.fitem" ng-model-options="{updateOn: 'blur'}" ng-change="vm.fitemOnChange()"
+                                   placeholder="Item To Add" style="width: 200px"/>
+                        </md-input-container>
+                        <!-- Prevents from leaving page since is last input-->
+                        <a href="javascrip:;"></a>
+                    </nav>
+                    <div ui-grid="vm.salesdetailsGrid" style="min-height: 200px" ng-style="{height: vm.salesdetailsHeight}" ui-grid-resize-columns
+                         ui-grid-auto-resize ui-grid-selection ui-grid-edit ui-grid-cellNav></div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>
+</div>

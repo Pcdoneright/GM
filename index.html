@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <!--<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />-->
+    <title>PCDONERIGHT.COM POS</title>
+    <link rel="stylesheet" href="master/bower_components/angular-toastr/dist/angular-toastr.min.css"/>
+    <link rel="stylesheet" href="master/other_components/MDicons/css/MDicon.min.css">
+    <link rel="stylesheet" href="master/other_components/ui-grid/ui-grid.min.css">
+    <link rel="stylesheet" href="master/other_components/angularGrid/angular-grid.min.css">
+    <link rel="stylesheet" href="master/other_components/angularGrid/theme-fresh.min.css">
+    <link rel="stylesheet" href="master/bower_components/angular-material/angular-material.min.css"/>
+
+    <link rel="stylesheet" href="app/css/style.css"/>
+
+    <!--Angular Libs-->
+    <script src="master/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="master/bower_components/angular/angular.min.js"></script>
+    <script src="master/bower_components/angular-route/angular-route.min.js"></script>
+    <script src="master/bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="master/bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="master/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="master/bower_components/hammerjs/hammer.min.js"></script>
+    <script src="master/bower_components/angular-material/angular-material.min.js"></script>
+    <script src="master/bower_components/angular-toastr/dist/angular-toastr.min.js"></script>
+    <script src="master/other_components/ui-grid/ui-grid.min.js"></script>
+    <script src="master/other_components/angularGrid/angular-grid.min.js"></script>
+
+    <script src="master/bower_components/ng-stats/dist/ng-stats.min.js"></script>
+
+    <!--JQuery Libs-->
+    <script src="master/bower_components/Flot/jquery.flot.js"></script>
+    <script src="master/bower_components/Flot/jquery.flot.categories.js"></script>
+    <script src="master/bower_components/Flot/jquery.flot.resize.js"></script>
+    <script src="master/other_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="master/other_components/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="master/other_components/moment/min/moment-with-locales.min.js"></script>
+
+
+    <!-- Application -->
+    <script src="app/app.js"></script>
+    <script src="app/services/extend.js"></script> <!-- Angular Extension/Overrides  -->
+    <script src="app/services/CompanyServices.js"></script>
+    <script src="app/services/DataEntrySvc.js"></script>
+    <script src="app/services/CompanyRules.js"></script>
+    <script src="app/company/login/login.js"></script>
+    <script src="app/company/mainmenu/mainmenu.js"></script>
+    <!-- Specific Application controllers -->
+    <script src="app/priceclassmaint/priceclassmaint.js"></script>
+    <script src="app/itemmaint/itemmaint.js"></script>
+    <script src="app/codemaintenance/codemaintenance.js"></script>
+    <script src="app/itempricemaint/itempricemaint.js"></script>
+    <script src="app/usermaint/usermaint.js"></script>
+    <script src="app/vendormaint/vendormaint.js"></script>
+    <script src="app/companymaint/companymaint.js"></script>
+    <script src="app/poentry/poentry.js"></script>
+    <script src="app/vendorterms/vendorterms.js"></script>
+    <script src="app/salespersonmaint/salespersonmaint.js"></script>
+    <script src="app/drivermaint/drivermaint.js"></script>
+    <script src="app/custmaint/custmaint.js"></script>
+    <script src="app/templates/itemlistSvc.js"></script>
+    <script src="app/soentry/soentrybase.js"></script>
+    <script src="app/soentry/soentry.js"></script>
+
+    <!--Test Only-->
+    <!--<script src="app/test/test.js"></script>-->
+
+    <!--&lt;!&ndash;Deployment&ndash;&gt;-->
+    <!--<script src="deploy/app.min.js"></script>-->
+    <!--<script src="deploy/services/extend.min.js"></script> &lt;!&ndash; Angular Extension/Overrides  &ndash;&gt;-->
+    <!--<script src="deploy/services/CompanyServices.min.js"></script>-->
+    <!--<script src="deploy/services/DataEntrySvc.min.js"></script>-->
+    <!--<script src="deploy/services/CompanyRules.min.js"></script>-->
+    <!--<script src="deploy/company/login/login.min.js"></script>-->
+    <!--<script src="deploy/company/mainmenu/mainmenu.min.js"></script>-->
+    <!--&lt;!&ndash; Specific Application controllers &ndash;&gt;-->
+    <!--<script src="deploy/priceclassmaint/priceclassmaint.min.js"></script>-->
+    <!--<script src="deploy/itemmaint/itemmaint.min.js"></script>-->
+    <!--<script src="deploy/codemaintenance/codemaintenance.min.js"></script>-->
+    <!--<script src="deploy/itempricemaint/itempricemaint.min.js"></script>-->
+    <!--<script src="deploy/usermaint/usermaint.min.js"></script>-->
+    <!--<script src="deploy/vendormaint/vendormaint.min.js"></script>-->
+    <!--<script src="deploy/companymaint/companymaint.min.js"></script>-->
+    <!--<script src="deploy/poentry/poentry.min.js"></script>-->
+    <!--<script src="deploy/vendorterms/vendorterms.min.js"></script>-->
+    <!--<script src="deploy/salespersonmaint/salespersonmaint.min.js"></script>-->
+    <!--<script src="deploy/drivermaint/drivermaint.min.js"></script>-->
+    <!--<script src="deploy/custmaint/custmaint.min.js"></script>-->
+    <!--<script src="deploy/templates/itemlistSvc.min.js"></script>-->
+    <!--<script src="deploy/soentry/soentrybase.min.js"></script>-->
+    <!--<script src="deploy/soentry/soentry.min.js"></script>-->
+
+    <script>
+        // Disable Backspace
+        document.onkeydown = function (event) {
+
+            if (!event) { /* This will happen in IE */
+                event = window.event;
+            }
+
+            var keyCode = event.keyCode;
+
+            if (keyCode == 8 &&
+                    ((event.target || event.srcElement).tagName != "TEXTAREA") &&
+                    ((event.target || event.srcElement).tagName != "INPUT")) {
+
+                if (navigator.userAgent.toLowerCase().indexOf("msie") == -1) {
+                    event.stopPropagation();
+                } else {
+                    alert("prevented");
+                    event.returnValue = false;
+                }
+
+                return false;
+            }
+        };
+    </script>
+</head>
+<body>
+    <!--Hour Glass-->
+    <div id="myHourGlass" ng-if="hourGlassLoading">
+        <md-progress-circular class="hourGlass-loader md-accent" md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <!--Main View-->
+    <ng-view></ng-view>
+</body>
+</html>

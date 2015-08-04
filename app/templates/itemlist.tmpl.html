@@ -1,0 +1,43 @@
+<md-dialog>
+    <md-content>
+        <div layout="column" class="widget-grid panel-nobox" flex>
+            <header>
+                <div layout="row" flex layout-align="start center" style="height: 34px">
+                    <span>Item List</span>
+                    <span flex></span>
+                    <span>Rows: {{c.parent.itemListGrid.rowData.length}}</span>
+                </div>
+            </header>
+            <nav layout="row" layout-align="start center">
+                <label>Search By:</label>
+                <md-radio-group ng-model="c.parent.searchItemType" layout="row" layout-align="start start">
+                    <md-radio-button value="I" aria-label="Item Number" class="widget-md-radio-button">Item</md-radio-button>
+                    <md-radio-button value="D" aria-label="Description" class="widget-md-radio-button">Description</md-radio-button>
+                    <md-radio-button value="O" aria-label="Onsale" class="widget-md-radio-button">On-Sale</md-radio-button>
+                    <md-radio-button value="A" aria-label="All" class="widget-md-radio-button">All</md-radio-button>
+                </md-radio-group>
+                <md-button ng-click="c.parent.searchItem = ''; c.parent.searchItemOnChange('')" aria-label="Refresh"
+                           class="md-raised md-primary widget-button-icon" style="margin-left: 10px"
+                           ng-if="c.parent.searchItemType == 'O' || c.parent.searchItemType == 'A'">
+                    <i class="mdicon search"></i>
+                </md-button>
+                <md-input-container md-no-float>
+                    <input type='text' ng-model="c.parent.searchItem" ng-model-options="{debounce: 800}" upper-case
+                           ng-change="c.parent.searchItemOnChange(c.parent.searchItem)" placeholder="Item" style="width: 250px" auto-focus="600"/>
+                </md-input-container>
+            </nav>
+            <div angular-grid="c.parent.itemListGrid" class="ag-fresh" style="height: 370px"></div>
+        </div>
+        <div layout="row" layout-align="start center" style="height: 50px">
+            <span flex></span>
+            <!--<md-button ng-click="c.parent.test()">Test</md-button>-->
+            <md-button ng-click="c.parent.dialogCancel()">Cancel</md-button>
+            <md-button ng-click="c.parent.dialogClose()">Select</md-button>
+        </div>
+    </md-content>
+    <!-- TODO: Stops working randonly-->
+    <!--<div class="md-actions">-->
+        <!--<md-button ng-click="c.parent.$mdDialog.cancel()">Cancel</md-button>-->
+        <!--<md-button ng-click="c.parent.$mdDialog.hide()">Continue</md-button>-->
+    <!--</div>-->
+</md-dialog>

@@ -1,0 +1,13 @@
+<div layout="column" class="widget-grid widget-grid-edit panel-nobox" flex ng-controller="salespersonMaint as vm">
+    <header>
+        <div layout="row" flex layout-align="start center">
+            <span>Sales Person</span>
+            <md-button class="md-raised md-primary widget-button" ng-click="vm.salespersonAdd()">Add</md-button>
+            <md-button class="md-raised widget-button" ng-click="vm.update()"><i class="mdicon save"></i> Save</md-button>
+            <span flex></span>
+            <span>Rows: {{vm.salespersonGrid.gridApi.grid.rows.length}}</span>
+        </div>
+    </header>
+    <div ui-grid="vm.salespersonGrid" style="min-height: 200px" ng-style="{height: vm.gHeight}"
+         ui-grid-resize-columns ui-grid-auto-resize ui-grid-edit ui-grid-cellNav ui-grid-selection></div>
+</div>
